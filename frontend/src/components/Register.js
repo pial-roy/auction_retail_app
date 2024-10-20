@@ -5,12 +5,10 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  
-
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:8000/register/', {  // Adjust the URL based on your backend setup
+    const response = await fetch('http://localhost:8000/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -21,7 +19,7 @@ const Register = () => {
     if (response.ok) {
       alert('User registered successfully!');
       setUsername('');
-      setEmail('')
+      setEmail('');
       setPassword('');
     } else {
       const errorData = await response.json();
@@ -42,7 +40,6 @@ const Register = () => {
             required
           />
         </div>
-        
         <div>
           <label>Email:</label>
           <input
@@ -52,7 +49,6 @@ const Register = () => {
             required
           />
         </div>
-        
         <div>
           <label>Password:</label>
           <input

@@ -1,14 +1,15 @@
-// frontend/src/components/Login.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Updated to use useNavigate
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:8000/login/', {  // Adjust the URL to your backend
+    const response = await fetch('http://localhost:8000/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +20,7 @@ const Login = () => {
     if (response.ok) {
       const data = await response.json();
       alert('Login successful');
-      // You can store user data (e.g., token) here
+      navigate('/home', { state: { username: data.username } }); // Updated to use navigate
     } else {
       const errorData = await response.json();
       alert(errorData.detail || 'Login failed');
@@ -39,7 +40,6 @@ const Login = () => {
             required
           />
         </div>
-
         <div>
           <label>Password:</label>
           <input
