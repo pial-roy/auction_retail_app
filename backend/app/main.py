@@ -53,3 +53,31 @@ async def register_user(user: UserCreate):
 @app.get("/")
 async def read_root():
     return {"message": "Welcome to the Retail Auction App!"}
+
+
+# backend/app/main.py
+from fastapi import FastAPI, HTTPException
+from .database import get_database
+import bcrypt
+from pydantic import BaseModel
+
+# User login model
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+@app.post("/login/")
+async def login_user(user: UserLogin):
+    db = await get_database()
+
+    # Find the user by email
+    db_user = await db.users.find_one({"email": user.email})
+
+    if not db_user:
+        raise HTTPException(status_code=400, detail="Invalid email or password")
+
+    # Check if the password matches
+    if not bcrypt.checkpw(user.password.encode('utf-8'), db_user['password'].encode('utf-8')):
+        raise HTTPException(status_code=400, detail="Invalid email or password")
+
+    return {"message": "Login successful!"}
